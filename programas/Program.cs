@@ -6,7 +6,7 @@ namespace Program
     {
         static void Main(string[] args)
         {
-            sumaERW(4294967296);
+            sumaERW(4967296);
         }
 
         private static int sumaERW(long n){
