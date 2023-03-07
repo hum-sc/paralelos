@@ -6,7 +6,7 @@ using namespace std;
 
 void minCRCW(int L[], int win[], int n, int indexMin){
     #pragma omp parallel for
-        for (int i = 0; i <= n; i++)
+        for (int i = 0; i < n; i++)
         {
             win[i]=0;
             //cout<<"\n"<<i<<", ";
@@ -14,15 +14,15 @@ void minCRCW(int L[], int win[], int n, int indexMin){
 
     
     cout<<"\nPaso 1: ";
-    for (int i = 0; i <= n; i++)
+    for (int i = 0; i < n; i++)
     {
         cout<<" "<<win[i]<<", ";
     }
     
     #pragma omp parallel for
-        for (int i = 0; i <=n; i++)
+        for (int i = 0; i <n; i++)
         {
-            for (int j = 0; j <= n; j++)
+            for (int j = 0; j < n; j++)
             {
                 if (i<j)
                 {
@@ -37,12 +37,12 @@ void minCRCW(int L[], int win[], int n, int indexMin){
             }
         }
     cout<<"\nPaso 2: ";
-    for (int i = 0; i <= n; i++)
+    for (int i = 0; i < n; i++)
     {
         cout<<" "<<win[i]<<", ";
     }
     #pragma omp parallel for
-    for (int i = 0; i <= n; i++)
+    for (int i = 0; i < n; i++)
     {
         if (win[i]==0)
         {
@@ -57,7 +57,25 @@ void minCRCW(int L[], int win[], int n, int indexMin){
 }
 
 int main(){
+
+    int n;
+    int x;
+    int indexMin=0;
+    cout<<"Ingrese el numero total de numeros: "; cin>>n;
+    
+    int L[n];
+    int win[n];
+    
+    for (int i = 0; i < n; i++)
+    {
+        cout<<"Ingrese el digito "<<i+1<<": "; cin>>x;
+        L[i]= x;
+    }
+    minCRCW(L,win,n,indexMin);
+
+    /*
     int L [] = {95,10,6,15};
+    
     int n = (sizeof(L)/sizeof(L[0]))-1;
     int win[n];
     int indexMin=0;
@@ -68,6 +86,8 @@ int main(){
     }
     
     minCRCW(L,win,n,indexMin);
+    */
+    
 
     return 0;
 }
