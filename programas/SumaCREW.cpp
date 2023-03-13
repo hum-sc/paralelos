@@ -8,80 +8,42 @@ using namespace std;
 
 void Thread(int i, int j, int A[])
 {
-    A[j] = A[j] + A[(j-((int)pow(2,i-1)))];
+    A[j] = A[j] + A[j - (int)(pow(2, i - 1))];
 }
 
 int main(){
-    
+    cout<<">>>>>>>>>>>>> Bienvenido al programa de SumasCREW <<<<<<<<<<<<<"<<endl;
+
+
     int n;
     int x;
+
     cout<<"Ingrese el numero total de numeros: "; cin>>n;
-    
     int A [n];
-    int B [n];
+
     for (int i = 0; i < n; i++)
     {
         cout<<"Ingrese el digito "<<i+1<<": "; cin>>x;
         A[i] = x;
-        B[i] = x;
+
     }
 
-    double log = (log2(n));
+    int log = ceil(log2(n));
 
-    for (int i = 1; i <= log+1; i++)
+    for (int i = 1; i <= log; i++)
     {
         #pragma omp parallel for
-            for (int j=((int)pow(2,i-1)); j< n; j++)
-            {  
-                Thread(i,j,A);
-                Thread(i,j,B);
-            }
-    }
+        for (int j=n; j >=((int)pow(2,i-1)); j--)
+        {  
+            Thread(i,j,A);
+        }
 
-    cout<<"A: ";
-    for (int i = 0; i < n; i++)
-    {
-        cout<<""<<A[i]<<", ";
+        cout<<"\nPaso numero "<<i<<":"<<endl;
+        for (int k = 0; k < n; k++)
+        {
+            cout<<""<<A[k]<<", ";
+        }
     }
-
-    cout<<"\nB: ";
-    for (int i = 0; i < n; i++)
-    {
-        cout<<" "<<B[i]<<", ";
-    }
-    
-    
-    /*
-    int A [] = {0,5,2,10,1,8};
-    int B [] = {0,5,2,10,1,8};
-    int longitud = sizeof(A)/sizeof(A[0]);
-
-    int a = longitud-1;
-    double log = (log2(a));
-
-    for (int i = 1; i <= log+1; i++)
-    {
-        #pragma omp parallel for
-            for (int j=((int)pow(2,i-1)+1); j <= a; j++)
-            {  
-                Thread(i,j,A);
-                Thread(i,j,B); 
-                
-            }
-
-    }
-    cout<<"\nA: ";
-    for (int i = 0; i <= a; i++)
-    {
-        cout<<" "<<A[i]<<", ";
-    }
-    cout<<"\nB: ";
-    for (int i = 0; i <= a; i++)
-    {
-        
-        cout<<" "<<B[i]<<", ";
-    }
-    */
-
+    cout<<"\n\nResultado: "<<A[n-1];
     return 0;
 }

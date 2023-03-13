@@ -9,7 +9,6 @@ void minCRCW(int L[], int win[], int n, int indexMin){
         for (int i = 0; i < n; i++)
         {
             win[i]=0;
-            //cout<<"\n"<<i<<", ";
         }
 
     
@@ -52,16 +51,17 @@ void minCRCW(int L[], int win[], int n, int indexMin){
 
 
 
-    cout<<"\nPaso 3, indice minimo: "<<indexMin;
-    cout<<"\nResultado: "<<L[indexMin];
+    cout<<"\nPaso 3, se encuentra en la posicion: "<<indexMin+1;
+    cout<<"\nNumero encontrado: "<<L[indexMin];
 }
 
 int main(){
-
+    cout<<">>>>>>>>>>>>> Bienvenido al programa de BusquedaCRCW <<<<<<<<<<<<<"<<endl;
+    cout<<"Se buscara el numero mas pequeño que sea ingresado";
     int n;
     int x;
     int indexMin=0;
-    cout<<"Ingrese el numero total de numeros: "; cin>>n;
+    cout<<"\n\nIngrese el numero total de numeros: "; cin>>n;
     
     int L[n];
     int win[n];
@@ -72,22 +72,5 @@ int main(){
         L[i]= x;
     }
     minCRCW(L,win,n,indexMin);
-
-    /*
-    int L [] = {95,10,6,15};
-    
-    int n = (sizeof(L)/sizeof(L[0]))-1;
-    int win[n];
-    int indexMin=0;
-    cout<<"\nValor L: ";
-    for (int i = 0; i <= n; i++)
-    {
-        cout<<" "<<L[i]<<", ";
-    }
-    
-    minCRCW(L,win,n,indexMin);
-    */
-    
-
     return 0;
 }

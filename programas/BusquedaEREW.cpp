@@ -3,27 +3,86 @@
 #include <math.h>
 
 using namespace std;
+int temp[100];
 
-void Broadcast(int x, int n, double log, int temp[]){
-    temp[0]=x;
+void Broadcast(int temp[], int bus, int n);
+void minimo (int L[], int n);
+void busquedaEREW(int L[], int bus, int n);
 
-    for (int i = 1; i <=log+1; i++)
+int main(){
+    cout<<">>>>>>>>>>>>> Bienvenido al programa de BusquedaEREW <<<<<<<<<<<<<";
+    int n, x, bus, resultado;
+    cout<<"\n\nIngrese el numero total de numeros: "; cin>>n;
+    n++;
+    int L[n];
+    L[0]=0;
+
+    for (int i = 1; i < n; i++)
     {
-        
-        #pragma omp parallel for
-        for (int j = (int)pow(2,i-1); j <= (int)pow(2,i); j++)
-        {
-
-            temp[j] = temp[j-(int)pow(2,i-1)];
-        }
-        
-
+        cout<<"Ingrese el digito "<<i<<": "; cin>>x;
+        L[i]= x;
     }
- 
+    cout<<"Ingrese el numero que quiere buscar: "; cin>>bus;
+
+    
+    busquedaEREW(L,bus,n-1);
+    return 0;
 }
 
-void busquedaEREW(int n, int L[], int temp[]){
-   #pragma omp parallel for
+void Broadcast(int temp[], int bus, int n){
+    temp[1]=bus;
+
+    for (int i = 1; i <= ceil(log2(n)); i++)
+    {
+        
+        #pragma omp parallel forshared(j, i)
+        for (int j = (int)(pow(2, i - 1) + 1); j <= (int)pow(2,i); j++)
+        {
+            temp[j] = temp[j-((int)pow(2, i - 1))];
+        }
+    }
+
+    cout<<"\nBroadcast: ";
+    for (int i = 1; i <= n; i++)
+    {
+        cout<<" "<<temp[i]<<", ";
+    } 
+}
+
+void minimo (int L[], int n)
+{
+    for (int j = 1; j <= ceil(log2(n)); j++)
+    {
+        #pragma omp parallel for
+        
+        for (int i = 1; i <= n/((int)(pow(2,j))); i++)
+        {
+            if (L[(2*i)-1] > L[2*i])
+            {
+                L[i] = L[2*i];
+
+            }
+            else
+            {
+                L[i]=L[(2*i)-1];
+            }
+        }
+        for (int k = (n/((int)(pow(2,j))))+1; k <= n; k++)
+        {
+            L[k]=0;
+        }
+    }
+    cout<<"\nMinimo: ";
+    for (int i = 1; i <= n; i++)
+    {
+        cout<<" "<<L[i]<<", ";
+    }
+    cout<<"\nSe encuentra en la posicion: "<<temp[1]; 
+}
+void busquedaEREW(int L[], int bus, int n){
+    Broadcast(temp,bus, n);
+
+    #pragma omp parallel for
     for (int i = 1; i <= n; i++)
     {
         
@@ -33,84 +92,15 @@ void busquedaEREW(int n, int L[], int temp[]){
         }
         else
         {
-            temp[i] = 0;
-        }
-        
-            
-    }
-}
-
-void minimo (int n, double log, int temp[], int L[]){
-    
-    for (int j = 1; j < log+1; j++)
-    {
-        #pragma omp parallel for
-        for (int i = 1; i <= (int)(n/(int)pow(2,j)); i++)
-        {
-            if (temp[(int)(pow(2,i)-1)] >= temp[(int)pow(2,i)])
-            {
-                temp[i]=temp[(int)pow(2,i)];
-            }
-            else
-            {
-                temp[i]=temp[(int)(pow(2,i)-1)];
-            }
-        }
+            temp[i] = 100000;
+        }            
     }
 
-    cout<<"\nMinimo: ";
+    cout<<"\nBusqueda: ";
     for (int i = 1; i <= n; i++)
     {
         cout<<" "<<temp[i]<<", ";
     }
+    minimo(temp, n);
 }
 
-int main(){
-    int temp[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    int x = 2;
-    //int L [] = {2,-1,23,-4,2,5,-2,0,5,1,5,-5,8,5,3,-2};
-    int n1 = (sizeof(temp)/sizeof(temp[0]))-1;
-    //int n1 = (sizeof(L)/sizeof(L[0]))-1;
-    /*
-    int temp[n1+1];
-    for (int i = 0; i <= n1; i++)
-    {
-        temp[i]=0;
-    }
-    */
-    //int n = (sizeof(temp)/sizeof(temp[0]))-1;
-
-    double log = (log2(n1+1));
-    
-
-    Broadcast(x,n1,log,temp);
-    cout<<"\nBroadcast: ";
-    for (int i = 1; i <= n1; i++)
-    {
-        cout<<" "<<temp[i]<<", ";
-    } 
-
-    int L [] = {0,2,-1,23,-4,2,5,-2,0,5,1,5,-5,8,5,3,-2};
-    //int L [] = {95,10,6,15};
-    int n2 = (sizeof(temp)/sizeof(temp[0]))-1;
-
-    busquedaEREW(n2,L,temp);
-    
-    cout<<"\nBusqueda: ";
-    for (int i = 1; i <= n1; i++)
-    {
-        cout<<" "<<temp[i]<<", ";
-    }
-
-    minimo(n2,log,temp, L);
-    int h=1, pos = 0;
-    while(h<n2){
-        if(temp[h]!=0){
-            pos=temp[h];
-        break;
-        }  
-    h=h+1;
-    }
-    cout<<"\nResultado: "<<pos;
-    return 0;
-}

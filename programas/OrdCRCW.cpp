@@ -57,6 +57,7 @@ void sortCRCW(int L[], int win[], int n){
 }
 
 int main(){
+    cout<<">>>>>>>>>>>>> Bienvenido al programa de OrdenamientoCRCW <<<<<<<<<<<<<"<<endl;
     int n;
     int x;
 
@@ -72,21 +73,6 @@ int main(){
     }
 
     sortCRCW(L,win,n);
-    /*
-    int L [] = {95,10,6,15};
-    int L [] = {2,-1,23,-4,2,5,-2,0,5,1,5,-5,8,5,3,-2};
-    int n = (sizeof(L)/sizeof(L[0]))-1;
-    int win[n];
-    int indexMin=0;
-    cout<<"\nValor L: ";
-    for (int i = 0; i <= n; i++)
-    {
-        cout<<" "<<L[i]<<", ";
-    }
-    
-    sortCRCW(L,win,n);
-    */
-    
 
     return 0;
 }
